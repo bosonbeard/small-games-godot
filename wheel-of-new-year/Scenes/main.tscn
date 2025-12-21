@@ -1,0 +1,23 @@
+[gd_scene load_steps=4 format=3 uid="uid://bnlkndjtnyy20"]
+
+[ext_resource type="PackedScene" uid="uid://dx07pmrsuvn0x" path="res://Scenes/barrel.tscn" id="1_bo1nx"]
+[ext_resource type="Texture2D" uid="uid://cie5klmdmu3bf" path="res://Assets/background.jpg" id="2_8gbba"]
+[ext_resource type="PackedScene" uid="uid://ctmfu85wktssl" path="res://Scenes/ui.tscn" id="3_8gbba"]
+
+[node name="Main" type="Node2D"]
+
+[node name="Background" type="TextureRect" parent="."]
+offset_right = 40.0
+offset_bottom = 40.0
+scale = Vector2(0.8570886, 0.8570886)
+texture = ExtResource("2_8gbba")
+
+[node name="Barrel" parent="." instance=ExtResource("1_bo1nx")]
+position = Vector2(881.00006, 343.00003)
+scale = Vector2(0.6316346, 0.6316346)
+
+[node name="UI" parent="." instance=ExtResource("3_8gbba")]
+offset_left = 234.0
+offset_top = 242.0
+offset_right = 234.0
+offset_bottom = 242.0

@@ -1,7 +1,7 @@
 [gd_scene load_steps=4 format=3 uid="uid://dx07pmrsuvn0x"]
 
 [ext_resource type="Texture2D" uid="uid://dfx3crnqd3jju" path="res://Assets/baraban.svg" id="1_a12vh"]
-[ext_resource type="Script" uid="uid://beb6wfpqpi8jn" path="res://Scenes/barrel.gd" id="1_rdxsi"]
+[ext_resource type="Script" uid="uid://beb6wfpqpi8jn" path="res://Scenes/barrel/barrel.gd" id="1_rdxsi"]
 [ext_resource type="Texture2D" uid="uid://c61v1trp0xdj2" path="res://Assets/arrow.svg" id="2_rdxsi"]
 
 [node name="Barrel" type="Node2D"]

@@ -15,6 +15,14 @@ run/main_scene="uid://bnlkndjtnyy20"
 config/features=PackedStringArray("4.5", "Mobile")
 config/icon="res://icon.svg"
 
+[autoload]
+
+global="*res://Core/global.gd"
+
+[editor_plugins]
+
+enabled=PackedStringArray("res://addons/date_time_label/plugin.cfg")
+
 [rendering]
 
 renderer/rendering_method="mobile"

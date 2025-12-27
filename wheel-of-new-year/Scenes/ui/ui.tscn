@@ -1,0 +1,101 @@
+[gd_scene load_steps=2 format=3 uid="uid://ctmfu85wktssl"]
+
+[ext_resource type="Script" uid="uid://btk145jl15xk4" path="res://addons/date_time_label/date_time_label.gd" id="1_jxero"]
+
+[node name="UI" type="Control"]
+layout_mode = 3
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+offset_right = -752.0
+offset_bottom = -228.0
+grow_horizontal = 2
+grow_vertical = 2
+
+[node name="VBoxContainer" type="VBoxContainer" parent="."]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+offset_top = -12.0
+offset_bottom = 48.0
+grow_horizontal = 2
+grow_vertical = 2
+theme_override_constants/separation = 15
+
+[node name="OptionButton" type="OptionButton" parent="VBoxContainer"]
+custom_minimum_size = Vector2(250, 0)
+layout_mode = 2
+selected = 0
+fit_to_longest_item = false
+item_count = 2
+popup/item_0/text = "Москва"
+popup/item_0/id = 0
+popup/item_1/text = "Санкт питербург"
+popup/item_1/id = 1
+
+[node name="ScrollContainer" type="ScrollContainer" parent="VBoxContainer"]
+custom_minimum_size = Vector2(400, 300)
+layout_mode = 2
+horizontal_scroll_mode = 0
+
+[node name="Panel" type="Panel" parent="VBoxContainer/ScrollContainer"]
+layout_mode = 2
+size_flags_horizontal = 3
+size_flags_vertical = 3
+
+[node name="Label" type="RichTextLabel" parent="VBoxContainer/ScrollContainer/Panel"]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+text = "Описание мероприятия.
+"
+fit_content = true
+
+[node name="Panel2" type="Panel" parent="VBoxContainer"]
+custom_minimum_size = Vector2(0, 50)
+layout_mode = 2
+
+[node name="LinkButton" type="LinkButton" parent="VBoxContainer/Panel2"]
+custom_minimum_size = Vector2(0, 30)
+layout_mode = 1
+anchors_preset = 8
+anchor_left = 0.5
+anchor_top = 0.5
+anchor_right = 0.5
+anchor_bottom = 0.5
+offset_left = -134.0
+offset_top = -15.0
+offset_right = 134.0
+offset_bottom = 15.0
+grow_horizontal = 2
+grow_vertical = 2
+tooltip_text = "Ссылка на событие"
+theme_override_colors/font_disabled_color = Color(0.34781694, 0.34781697, 0.3478169, 1)
+disabled = true
+text = "Ссылка на предстоящее событие"
+uri = "http://ya.ru"
+
+[node name="Panel" type="Panel" parent="VBoxContainer"]
+custom_minimum_size = Vector2(0, 50)
+layout_mode = 2
+
+[node name="DateTimeLabel" type="RichTextLabel" parent="VBoxContainer/Panel"]
+layout_mode = 1
+anchors_preset = 14
+anchor_top = 0.5
+anchor_right = 1.0
+anchor_bottom = 0.5
+offset_top = -11.5
+offset_bottom = 11.5
+grow_horizontal = 2
+grow_vertical = 2
+fit_content = true
+horizontal_alignment = 1
+script = ExtResource("1_jxero")
+format_str = "События с {day}.{month}.{year} {hour}:{minute%02d}:{second%02d} до конца дня."
+update_on_frame = false
+metadata/_custom_type_script = "uid://btk145jl15xk4"

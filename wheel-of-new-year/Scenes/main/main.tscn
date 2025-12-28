@@ -1,10 +1,12 @@
-[gd_scene load_steps=4 format=3 uid="uid://bnlkndjtnyy20"]
+[gd_scene load_steps=5 format=3 uid="uid://bnlkndjtnyy20"]
 
 [ext_resource type="PackedScene" uid="uid://dx07pmrsuvn0x" path="res://Scenes/barrel/barrel.tscn" id="1_bo1nx"]
+[ext_resource type="Script" uid="uid://b6y0r78yrieh2" path="res://Scenes/main/main.gd" id="1_wcurd"]
 [ext_resource type="Texture2D" uid="uid://cie5klmdmu3bf" path="res://Assets/background.jpg" id="2_8gbba"]
 [ext_resource type="PackedScene" uid="uid://ctmfu85wktssl" path="res://Scenes/ui/ui.tscn" id="3_8gbba"]
 
 [node name="Main" type="Node2D"]
+script = ExtResource("1_wcurd")
 
 [node name="Background" type="TextureRect" parent="."]
 offset_right = 40.0
@@ -17,7 +19,7 @@ position = Vector2(881.00006, 343.00003)
 scale = Vector2(0.6316346, 0.6316346)
 
 [node name="UI" parent="." instance=ExtResource("3_8gbba")]
-offset_left = 247.0
-offset_top = 309.0
-offset_right = 247.0
-offset_bottom = 309.0
+offset_left = 246.0
+offset_top = 77.0
+offset_right = 246.0
+offset_bottom = 77.0

@@ -1,8 +1,10 @@
-[gd_scene load_steps=2 format=3 uid="uid://ctmfu85wktssl"]
+[gd_scene load_steps=3 format=3 uid="uid://ctmfu85wktssl"]
 
 [ext_resource type="Script" uid="uid://btk145jl15xk4" path="res://addons/date_time_label/date_time_label.gd" id="1_jxero"]
+[ext_resource type="Script" uid="uid://dyli66m6w3hlc" path="res://Scenes/ui/ui.gd" id="1_oak0x"]
 
 [node name="UI" type="Control"]
+custom_minimum_size = Vector2(400, 0)
 layout_mode = 3
 anchors_preset = 15
 anchor_right = 1.0
@@ -11,19 +13,36 @@ offset_right = -752.0
 offset_bottom = -228.0
 grow_horizontal = 2
 grow_vertical = 2
+size_flags_vertical = 0
+script = ExtResource("1_oak0x")
 
 [node name="VBoxContainer" type="VBoxContainer" parent="."]
 layout_mode = 1
-anchors_preset = 15
+anchors_preset = 10
 anchor_right = 1.0
-anchor_bottom = 1.0
-offset_top = -12.0
-offset_bottom = 48.0
+offset_bottom = 476.0
 grow_horizontal = 2
-grow_vertical = 2
 theme_override_constants/separation = 15
 
-[node name="OptionButton" type="OptionButton" parent="VBoxContainer"]
+[node name="DateTimePanel" type="Panel" parent="VBoxContainer"]
+custom_minimum_size = Vector2(0, 50)
+layout_mode = 2
+
+[node name="DateTimeLabel" type="RichTextLabel" parent="VBoxContainer/DateTimePanel"]
+layout_mode = 1
+anchors_preset = 10
+anchor_right = 1.0
+offset_bottom = 46.0
+grow_horizontal = 2
+fit_content = true
+horizontal_alignment = 1
+script = ExtResource("1_jxero")
+format_str = "События с {day}.{month}.{year} {hour}:{minute%02d} 
+до конца дня."
+update_on_frame = false
+metadata/_custom_type_script = "uid://btk145jl15xk4"
+
+[node name="Cities" type="OptionButton" parent="VBoxContainer"]
 custom_minimum_size = Vector2(250, 0)
 layout_mode = 2
 selected = 0
@@ -39,38 +58,40 @@ custom_minimum_size = Vector2(400, 300)
 layout_mode = 2
 horizontal_scroll_mode = 0
 
-[node name="Panel" type="Panel" parent="VBoxContainer/ScrollContainer"]
+[node name="DescPanel" type="Panel" parent="VBoxContainer/ScrollContainer"]
 layout_mode = 2
 size_flags_horizontal = 3
 size_flags_vertical = 3
 
-[node name="Label" type="RichTextLabel" parent="VBoxContainer/ScrollContainer/Panel"]
+[node name="MarginContainer" type="MarginContainer" parent="VBoxContainer/ScrollContainer/DescPanel"]
 layout_mode = 1
 anchors_preset = 15
 anchor_right = 1.0
 anchor_bottom = 1.0
 grow_horizontal = 2
 grow_vertical = 2
-text = "Описание мероприятия.
+theme_override_constants/margin_left = 2
+theme_override_constants/margin_top = 2
+theme_override_constants/margin_right = 2
+theme_override_constants/margin_bottom = 2
+
+[node name="Description" type="RichTextLabel" parent="VBoxContainer/ScrollContainer/DescPanel/MarginContainer"]
+layout_mode = 2
+bbcode_enabled = true
+text = "[b]Описание мероприятия.[/b]
 "
 fit_content = true
 
-[node name="Panel2" type="Panel" parent="VBoxContainer"]
+[node name="UrlPanel" type="Panel" parent="VBoxContainer"]
 custom_minimum_size = Vector2(0, 50)
 layout_mode = 2
 
-[node name="LinkButton" type="LinkButton" parent="VBoxContainer/Panel2"]
+[node name="URL" type="LinkButton" parent="VBoxContainer/UrlPanel"]
 custom_minimum_size = Vector2(0, 30)
 layout_mode = 1
-anchors_preset = 8
-anchor_left = 0.5
-anchor_top = 0.5
-anchor_right = 0.5
-anchor_bottom = 0.5
-offset_left = -134.0
-offset_top = -15.0
-offset_right = 134.0
-offset_bottom = 15.0
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
 grow_horizontal = 2
 grow_vertical = 2
 tooltip_text = "Ссылка на событие"
@@ -78,24 +99,3 @@ theme_override_colors/font_disabled_color = Color(0.34781694, 0.34781697, 0.3478
 disabled = true
 text = "Ссылка на предстоящее событие"
 uri = "http://ya.ru"
-
-[node name="Panel" type="Panel" parent="VBoxContainer"]
-custom_minimum_size = Vector2(0, 50)
-layout_mode = 2
-
-[node name="DateTimeLabel" type="RichTextLabel" parent="VBoxContainer/Panel"]
-layout_mode = 1
-anchors_preset = 14
-anchor_top = 0.5
-anchor_right = 1.0
-anchor_bottom = 0.5
-offset_top = -11.5
-offset_bottom = 11.5
-grow_horizontal = 2
-grow_vertical = 2
-fit_content = true
-horizontal_alignment = 1
-script = ExtResource("1_jxero")
-format_str = "События с {day}.{month}.{year} {hour}:{minute%02d}:{second%02d} до конца дня."
-update_on_frame = false
-metadata/_custom_type_script = "uid://btk145jl15xk4"

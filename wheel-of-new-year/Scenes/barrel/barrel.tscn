@@ -14,3 +14,22 @@ texture = ExtResource("1_a12vh")
 position = Vector2(1.9073486e-06, -343.00003)
 scale = Vector2(0.4163038, 0.4163038)
 texture = ExtResource("2_rdxsi")
+
+[node name="Label" type="Label" parent="."]
+offset_left = -184.0
+offset_top = -443.0
+offset_right = 177.0
+offset_bottom = -415.0
+theme_override_font_sizes/font_size = 20
+text = "Вращайте мышью или тачскрином"
+
+[node name="ClickArea" type="Control" parent="."]
+layout_mode = 3
+anchors_preset = 0
+offset_left = -570.00006
+offset_top = -492.99997
+offset_right = 129.99994
+offset_bottom = 507.00003
+scale = Vector2(1.5494788, 1.0128647)
+size_flags_horizontal = 3
+size_flags_vertical = 3

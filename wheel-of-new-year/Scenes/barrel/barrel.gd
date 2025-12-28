@@ -26,9 +26,16 @@ var sectors_count = global.sectors.size()
 
 func _ready():
 	set_process_input(true)  # Включаем обработку событий ввода
+	
 	print(sectors_count)
 
+func is_point_over_barrel(point):
+	var rect = $ClickArea.get_global_rect()
+	return rect.has_point(point)
+
 func _input(event):
+	if !is_point_over_barrel(event.position):
+		return
 	if event is InputEventMouseButton:
 		if event.pressed:
 			handle_touch_start(event.position)
@@ -50,17 +57,20 @@ func _input(event):
 func handle_touch_start(touch_position):
 	touch_start_position = touch_position
 	last_touch_time = Time.get_ticks_msec()
-	emit_signal("spin_started")
+	global.spin_started.emit()
 	print("Начало касания:", touch_start_position)
 
 func handle_touch_release():
 	var time_diff_ms = Time.get_ticks_msec() - last_touch_time
 	var distance = touch_start_position.distance_to(touch_end_position)
+
 	var speed = clamp(max_rotation_speed * (distance / (time_diff_ms * touch_slow_down_coefficient)), min_rotation_speed, max_rotation_speed)
 	if is_rotating == false:
 		spin_sign =  sign(touch_start_position.normalized().angle_to(touch_end_position.normalized()) )
 		current_rotation_speed = speed * spin_sign
 		is_rotating = true
+		global.spin_started.emit()
+		global.init_ui.emit()
 		print("Запуск вращения с начальной скоростью:", current_rotation_speed)
 		print("Трение: ", friction_coefficient )
 	
@@ -74,11 +84,20 @@ func slow_down():
 
 func determine_sector():
 	var sector_size = 360.0 / sectors_count
-	
-	var result_sector = floori((($Wheel.rotation_degrees * global.SECTOR_ROTATION_SIGNS )+ (sector_size / 2)) / sector_size) % sectors_count
+	# Приведение угла к положительным значениям с учетом направления вращения
+	var wheel_angle = $Wheel.rotation_degrees * spin_sign
+	print( spin_sign)
+	# Применение поправки на знак вращения
+	if spin_sign > 0:
+		wheel_angle = 360 - wheel_angle  # Инвертируем угол при вращении против часовой стрелки
+	# Центрирование границы секторов
+	var centered_angle = wheel_angle + (sector_size / 2)
+	# Определение сектора
+	var result_sector = floori(centered_angle / sector_size) % sectors_count
 	print( $Wheel.rotation_degrees )
-	emit_signal("spin_finished",global.sectors[result_sector])
-	print("Выпал сектор: " +global.sectors[result_sector])
+	global.spin_finished.emit(result_sector)
+	print("Выпал сектор: " +str(global.sectors[result_sector]))
+	
 
 func _process(delta):
 	if is_rotating:

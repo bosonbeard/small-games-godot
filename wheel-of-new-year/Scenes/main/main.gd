@@ -33,10 +33,11 @@ func _on_spin_started ():
 func _on_spin_finished (sector:int):
 	var city_idx = $UI/VBoxContainer/Cities.selected
 	var city = global.locations[city_idx].slug
-	var requset="https://kudago.com/public-api/v1.4/events/?categories=theater&actual_until=1690664400&fields=title,description,site_url&actual_since=1690647857&text_format=text&location={city}".format({"city":city})
+	var category = global.sectors[sector]
+	var requset="https://kudago.com/public-api/v1.4/events/?categories={category}&actual_since=1764358864&actual_until=1798486864&fields=title,description,site_url&text_format=text&location={city}".format({ "category":category, "city":city})
 	print(requset)
 	await http_request_event.request(requset)
-	print(event)
+	#print(event)
 	
 	
 
@@ -59,17 +60,18 @@ func _on_event_request_completed(result, response_code, headers, body):
 	var json = JSON.new()
 	json.parse(body.get_string_from_utf8())
 	var response = json.get_data()
-	if response.count>0:
-		var rnd_event =  response.results[ rng.randi_range(0, response.count-1)]  
-		print (rnd_event)
-		event = {
-			"title": rnd_event.title,
-			"url": rnd_event.site_url,
-			"desc": rnd_event.description
-		}
-		$UI.show_event(event)
-	# Will print the user agent string used by the HTTPRequest node (as recognized by httpbin.org).
-		print(response)
+	if  response_code == 200:
+		if response.count>0:
+			var rnd_event =  response.results[ rng.randi_range(0, response.results.size()-1)]  
+			print (rnd_event)
+			event = {
+				"title": rnd_event.title,
+				"url": rnd_event.site_url,
+				"desc": rnd_event.description
+			}
+			$UI.show_event(event)
+		# Will print the user agent string used by the HTTPRequest node (as recognized by httpbin.org).
+			print(response)
 	
 func update_locations(locations:Array):
 	var cities = UI.get_node("VBoxContainer/Cities")

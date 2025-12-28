@@ -16,14 +16,14 @@ const SECTOR_ROTATION_SIGNS = - 1 #сли сектора заданы по ча�
 #}
 
 var sectors = [
-	["cinema"],
-	["theater"],
-	["сoncert"],
-	["quest"],
-	["exhibition"],
-	["party","social-activity",],
-	["education"],
-	["entertainment","festival","other"]
+	"cinema",
+	"theater",
+	"concert",
+	"quest",
+	"exhibition",
+	"party,social-activity",
+	"education",
+	"entertainment,festival,other"
 ]
 
 var locations = []

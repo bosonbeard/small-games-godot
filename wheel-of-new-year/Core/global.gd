@@ -28,6 +28,7 @@ var sectors = [
 
 var locations = []
 
+var can_spin = true
 
 signal init_ui()
 

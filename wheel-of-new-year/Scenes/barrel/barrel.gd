@@ -9,8 +9,6 @@ extends Node2D
 @export var touch_slow_down_coefficient = 5
 
 
-
-
 var touch_start_position = Vector2.ZERO  # Начало касания
 var touch_end_position = Vector2.ZERO  # Конечная позиция касания
 var current_rotation_speed = 0  # Текущая скорость вращения
@@ -61,18 +59,18 @@ func handle_touch_start(touch_position):
 	print("Начало касания:", touch_start_position)
 
 func handle_touch_release():
-	var time_diff_ms = Time.get_ticks_msec() - last_touch_time
-	var distance = touch_start_position.distance_to(touch_end_position)
+	if global.can_spin==true:
+		var time_diff_ms = Time.get_ticks_msec() - last_touch_time
+		var distance = touch_start_position.distance_to(touch_end_position)
 
-	var speed = clamp(max_rotation_speed * (distance / (time_diff_ms * touch_slow_down_coefficient)), min_rotation_speed, max_rotation_speed)
-	if is_rotating == false:
-		spin_sign =  sign(touch_start_position.normalized().angle_to(touch_end_position.normalized()) )
-		current_rotation_speed = speed * spin_sign
-		is_rotating = true
-		global.spin_started.emit()
-		global.init_ui.emit()
-		print("Запуск вращения с начальной скоростью:", current_rotation_speed)
-		print("Трение: ", friction_coefficient )
+		var speed = clamp(max_rotation_speed * (distance / (time_diff_ms * touch_slow_down_coefficient)), min_rotation_speed, max_rotation_speed)
+		if is_rotating == false:
+			spin_sign =  sign(touch_start_position.normalized().angle_to(touch_end_position.normalized()) )
+			current_rotation_speed = speed * spin_sign
+			is_rotating = true
+			global.spin_started.emit()
+			print("Запуск вращения с начальной скоростью:", current_rotation_speed)
+			print("Трение: ", friction_coefficient )
 	
 		
 func slow_down():

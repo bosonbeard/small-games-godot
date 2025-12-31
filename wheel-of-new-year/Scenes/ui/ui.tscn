@@ -37,8 +37,9 @@ grow_horizontal = 2
 fit_content = true
 horizontal_alignment = 1
 script = ExtResource("1_jxero")
-format_str = "События с {day}.{month}.{year} {hour}:{minute%02d} 
-до конца дня."
+format_str = "Афиша событий за 24 часа
+начиная с {day}.{month}.{year} {hour}:{minute%02d} 
+"
 update_on_frame = false
 metadata/_custom_type_script = "uid://btk145jl15xk4"
 

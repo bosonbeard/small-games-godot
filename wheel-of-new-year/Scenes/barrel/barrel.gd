@@ -1,8 +1,6 @@
 extends Node2D
 
 
-
-
 @export var max_rotation_speed = 25.5 # Максимальная скорость вращения
 @export var min_rotation_speed = 0.5 # Минимальная скорость вращения
 @export var friction_coefficient = 0.990  # Коэффициент замедления вращения
@@ -15,33 +13,27 @@ var current_rotation_speed = 0  # Текущая скорость вращени
 var last_touch_time = 0  # Время начала касания
 var is_rotating = false  # Флаг вращения
 var spin_sign = 1
-
-
-
 	
 var sectors_count = global.sectors.size()
 
-
 func _ready():
 	set_process_input(true)  # Включаем обработку событий ввода
-	
-	print(sectors_count)
+
+
 
 func is_point_over_barrel(point):
 	var rect = $ClickArea.get_global_rect()
 	return rect.has_point(point)
 
 func _input(event):
-	if !is_point_over_barrel(event.position):
-		return
-	if event is InputEventMouseButton:
+	if event is InputEventMouseButton and is_point_over_barrel(event.position):
 		if event.pressed:
 			handle_touch_start(event.position)
 		#	print("Нажата кнопка мыши.")
 		elif event.button_index == MOUSE_BUTTON_LEFT and not event.pressed:  # Левая кнопка мыши отпущена
 			handle_touch_release()
 		#	print("Кнопка мыши отпущена.")
-	elif event is InputEventScreenTouch:
+	elif event is InputEventScreenTouch and is_point_over_barrel(event.position):
 		if event.pressed:
 			handle_touch_start(event.position)
 		#	print("Прикоснулся к экрану.")
@@ -53,10 +45,11 @@ func _input(event):
 	#	print("Перемещается мышь или палец.")
 
 func handle_touch_start(touch_position):
-	touch_start_position = touch_position
-	last_touch_time = Time.get_ticks_msec()
-	global.spin_started.emit()
-	print("Начало касания:", touch_start_position)
+	if global.can_spin==true:
+		touch_start_position = touch_position
+		last_touch_time = Time.get_ticks_msec()
+		global.spin_started.emit()
+		print("Начало касания:", touch_start_position)
 
 func handle_touch_release():
 	if global.can_spin==true:
@@ -76,15 +69,16 @@ func handle_touch_release():
 func slow_down():
 	if is_rotating == true:
 		current_rotation_speed *= friction_coefficient 
-		if abs(current_rotation_speed) < 0.1:
+		if abs(current_rotation_speed) < 0.25:
 			is_rotating = false
 			determine_sector()
 
 func determine_sector():
 	var sector_size = 360.0 / sectors_count
 	# Приведение угла к положительным значениям с учетом направления вращения
-	var wheel_angle = $Wheel.rotation_degrees * spin_sign
-	print( spin_sign)
+	var rotation_deg = $Wheel.rotation_degrees
+	var wheel_angle =  rotation_deg * spin_sign
+
 	# Применение поправки на знак вращения
 	if spin_sign > 0:
 		wheel_angle = 360 - wheel_angle  # Инвертируем угол при вращении против часовой стрелки
@@ -92,10 +86,28 @@ func determine_sector():
 	var centered_angle = wheel_angle + (sector_size / 2)
 	# Определение сектора
 	var result_sector = floori(centered_angle / sector_size) % sectors_count
-	print( $Wheel.rotation_degrees )
 	global.spin_finished.emit(result_sector)
 	print("Выпал сектор: " +str(global.sectors[result_sector]))
+	rocking_wheel(rotation_deg,spin_sign)
+
+
+func rocking_wheel(final_rotation,spin_sign):
+	var sign = spin_sign
+	var transition_duration = 1.0 # Длительность перехода в секундах
+	var rotation_span = 1.5  # Начальная прозрачность
+	var wheel = $Wheel
+	var tween = create_tween()
+	var first_step= wheel.rotation_degrees - rotation_span * sign 
+	var second_step = wheel.rotation_degrees  + (rotation_span / 4.0 * sign )
+	global.can_spin=false
+	tween.finished.connect(_on_wheel_tween_finished)
+	tween.tween_property(wheel, "rotation_degrees", first_step , transition_duration)
+	tween.tween_property(wheel, "rotation_degrees", second_step , transition_duration)
+	tween.tween_property(wheel, "rotation_degrees", final_rotation  , transition_duration)
 	
+
+func _on_wheel_tween_finished():
+	global.can_spin=true
 
 func _process(delta):
 	if is_rotating:

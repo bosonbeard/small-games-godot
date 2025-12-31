@@ -8,7 +8,7 @@ var http_request_location = HTTPRequest.new()
 var http_request_event = HTTPRequest.new()
 const USER_CONFIG = "user://config.json"
 const API_LOCATIONS_URL = "https://kudago.com/public-api/v1.2/locations/?lang=ru&fields=slug,name"
-const API_EVENTS_TEMPLATE = "https://kudago.com/public-api/v1.4/events/?categories={category}&actual_since={cutrrent_dt}&actual_until={next_day}&fields=title,description,site_url&text_format=text&location={city}"
+const API_EVENTS_TEMPLATE = "https://kudago.com/public-api/v1.4/events/?categories={category}&actual_since={current_dt}&actual_until={next_day}&fields=title,description,site_url&text_format=text&location={city}"
 
 
 # Called when the node enters the scene tree for the first time.
@@ -34,16 +34,14 @@ func _on_spin_started ():
 	$UI.init_ui()
 
 func _on_spin_finished (sector:int):
-	var cutrrent_dt = int(Time.get_unix_time_from_system())
-	var next_day= cutrrent_dt+(24*60*60)
+	var current_dt = int(Time.get_unix_time_from_system())
+	var next_day= current_dt+(24*60*60)
 	var category = global.sectors[sector]
 	var city_idx = $UI/VBoxContainer/Cities.selected
 	var city = global.locations[city_idx].slug
-	#print(cutrrent_dt,next_day )
-	var requset=API_EVENTS_TEMPLATE.format({ "category":category, "city":city, "cutrrent_dt":cutrrent_dt, "next_day":next_day})
-	#print(requset)
-	http_request_event.request(requset)
+	var requset=API_EVENTS_TEMPLATE.format({ "category":category, "city":city, "current_dt":current_dt, "next_day":next_day})
 
+	http_request_event.request(requset)
 
 func _on_location_request_completed(result, response_code, headers, body):
 
@@ -55,7 +53,7 @@ func _on_location_request_completed(result, response_code, headers, body):
 			var cities = response.filter(	(func(element): return element.slug != "interesting"))
 			update_locations(cities)
 			global.locations = cities
-			print(global.locations )
+		#	print(global.locations )
 		else:
 			error_locations_handler()
 	else:
@@ -112,7 +110,7 @@ func write_json_data(filename: String, data: Dictionary) -> bool:
 	if file.is_open():
 		var json_str = JSON.stringify(data)
 		file.store_string(json_str)
-		print(file.get_path_absolute())
+		#print(file.get_path_absolute())
 		file.close()
 		return true
 	else:

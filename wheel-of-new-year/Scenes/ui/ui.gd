@@ -1,17 +1,8 @@
 extends Control
 
-var transition_duration = 0.65  # Длительность перехода в секундах
+var transition_duration = 1.5 # Длительность перехода в секундах
 var start_alpha = 0.0  # Начальная прозрачность
 var end_alpha = 1  # Конечная прозрачность
-
-# Called when the node enters the scene tree for the first time.
-func _ready() -> void:
-	pass # Replace with function body.
-
-
-# Called every frame. 'delta' is the elapsed time since the previous frame.
-func _process(delta: float) -> void:
-	pass
 
 func init_ui():
 	$VBoxContainer/ScrollContainer.visible = false
@@ -20,23 +11,16 @@ func init_ui():
 	$VBoxContainer/UrlPanel/URL.uri=""
 	$VBoxContainer/UrlPanel/URL.disabled = true
 	$VBoxContainer/DateTimePanel/DateTimeLabel.update_text() 
-	
 
 func show_smoothly(node):
 	var tween = create_tween()
 	node = get_node(node)
 	if node:
-		print(node.modulate)
 		node.modulate.a = 0
-	
-		print(node.modulate)
 		tween.tween_property(node, "modulate:a",  end_alpha, transition_duration)
-	
 
 func show_event(event:Dictionary):
 	var text = ""
-		
-
 	if event.has("title"):
 		text = "[b]{title}[/b]\n".format({"title":event.title})
 	
@@ -47,15 +31,13 @@ func show_event(event:Dictionary):
 		show_smoothly("VBoxContainer/ScrollContainer/DescPanel")
 		$VBoxContainer/ScrollContainer.visible = true
 		$VBoxContainer/ScrollContainer/DescPanel/MarginContainer/Description.text =  text
-	
-		
+			
 	if event.has("url"):
-		show_smoothly("VBoxContainer/UrlPanel/URL")
-		$VBoxContainer/UrlPanel.visible = true
+		$VBoxContainer/UrlPanel/URL.disabled = false
 		var url = event.url
 		$VBoxContainer/UrlPanel/URL.uri= url
-		$VBoxContainer/UrlPanel/URL.disabled = false
-
+		show_smoothly("VBoxContainer/UrlPanel/")
+		$VBoxContainer/UrlPanel.visible = true
 
 func select_city_by_name(target_name):
 	# Получить количество пунктов в OptionButton
@@ -70,7 +52,7 @@ func select_city_by_name(target_name):
 			option_button.select(i)
 	return -1  # Если элемент не найден, возвращаем -1
 	
-	
+
 func get_selected_city_name():
 	# Получить количество пунктов в OptionButton
 	var option_button = $VBoxContainer/Cities
@@ -78,6 +60,5 @@ func get_selected_city_name():
 	var city = {"city": option_button.get_item_text(selected)}
 	return city
 
-
-func _on_cities_item_selected(index: int) -> void:
+func _on_cities_item_selected(index: int):
 	init_ui()

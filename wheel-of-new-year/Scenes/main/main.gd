@@ -9,6 +9,8 @@ var http_request_event = HTTPRequest.new()
 const USER_CONFIG = "user://config.json"
 const API_LOCATIONS_URL = "https://kudago.com/public-api/v1.2/locations/?lang=ru&fields=slug,name"
 const API_EVENTS_TEMPLATE = "https://kudago.com/public-api/v1.4/events/?categories={category}&actual_since={cutrrent_dt}&actual_until={next_day}&fields=title,description,site_url&text_format=text&location={city}"
+
+
 # Called when the node enters the scene tree for the first time.
 func _ready() -> void:
 	rng.randomize()  # Автоматически установит случайное зерно
@@ -32,15 +34,14 @@ func _on_spin_started ():
 	$UI.init_ui()
 
 func _on_spin_finished (sector:int):
-	var city_idx = $UI/VBoxContainer/Cities.selected
-	var city = global.locations[city_idx].slug
-	var category = global.sectors[sector]
-	
 	var cutrrent_dt = int(Time.get_unix_time_from_system())
 	var next_day= cutrrent_dt+(24*60*60)
-	print(cutrrent_dt,next_day )
+	var category = global.sectors[sector]
+	var city_idx = $UI/VBoxContainer/Cities.selected
+	var city = global.locations[city_idx].slug
+	#print(cutrrent_dt,next_day )
 	var requset=API_EVENTS_TEMPLATE.format({ "category":category, "city":city, "cutrrent_dt":cutrrent_dt, "next_day":next_day})
-	print(requset)
+	#print(requset)
 	http_request_event.request(requset)
 
 
@@ -76,7 +77,7 @@ func _on_event_request_completed(result, response_code, headers, body):
 	if  response_code == 200:
 		if response.count>0:
 			var rnd_event =  response.results[ rng.randi_range(0, response.results.size()-1)]
-			print (rnd_event)
+		#	print (rnd_event)
 			event = {
 				"title": rnd_event.title[0].to_upper() + rnd_event.title.substr(1,-1),
 				"url": rnd_event.site_url,
@@ -92,7 +93,7 @@ func _on_event_request_completed(result, response_code, headers, body):
 			"desc": "Ошибка при получении событий"
 		}
 	$UI.show_event(event)
-	print(response_code)
+	#print(response_code)
 	var selected_city = $UI.get_selected_city_name()
 	write_json_data(USER_CONFIG, selected_city)
 	

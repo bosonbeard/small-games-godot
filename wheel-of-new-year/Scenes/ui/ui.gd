@@ -1,6 +1,8 @@
 extends Control
 
-
+var transition_duration = 0.65  # Длительность перехода в секундах
+var start_alpha = 0.0  # Начальная прозрачность
+var end_alpha = 1  # Конечная прозрачность
 
 # Called when the node enters the scene tree for the first time.
 func _ready() -> void:
@@ -20,32 +22,39 @@ func init_ui():
 	$VBoxContainer/DateTimePanel/DateTimeLabel.update_text() 
 	
 
+func show_smoothly(node):
+	var tween = create_tween()
+	node = get_node(node)
+	if node:
+		print(node.modulate)
+		node.modulate.a = 0
+	
+		print(node.modulate)
+		tween.tween_property(node, "modulate:a",  end_alpha, transition_duration)
+	
+
 func show_event(event:Dictionary):
 	var text = ""
+		
 
-	
 	if event.has("title"):
-		$VBoxContainer/ScrollContainer.visible = true
 		text = "[b]{title}[/b]\n".format({"title":event.title})
 	
 	if event.has("desc"):
-		$VBoxContainer/ScrollContainer.visible = true
 		text += "{desc}".format({"desc":event.desc})
 		
 	if event.has("title") or event.has("desc"):
+		show_smoothly("VBoxContainer/ScrollContainer/DescPanel")
 		$VBoxContainer/ScrollContainer.visible = true
 		$VBoxContainer/ScrollContainer/DescPanel/MarginContainer/Description.text =  text
+	
 		
 	if event.has("url"):
+		show_smoothly("VBoxContainer/UrlPanel/URL")
 		$VBoxContainer/UrlPanel.visible = true
 		var url = event.url
 		$VBoxContainer/UrlPanel/URL.uri= url
 		$VBoxContainer/UrlPanel/URL.disabled = false
-	
-	#$VBoxContainer/DateTimePanel.visible = true
-	
-	
-
 
 
 func select_city_by_name(target_name):

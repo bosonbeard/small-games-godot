@@ -2,19 +2,7 @@ extends Node
 
 const SECTOR_ROTATION_SIGNS = - 1 #сли сектора заданы по часовой стрелке
 
-
-
-#var sectors = {
-	#"cinema": ["cinema"],
-	#"theater": ["theater"],
-	#"сoncert": ["сoncert"],
-	#"quest": ["quest"],
-	#"exhibition": ["exhibition"],
-	#"social": ["party","social-activity",],
-	#"education": ["education"],
-	#"other": ["entertainment","festival","other"]
-#}
-
+# Сектора для барабана, по приязке к категориям API, идут по часовой
 var sectors = [
 	"cinema",
 	"theater",
@@ -26,12 +14,17 @@ var sectors = [
 	"entertainment,festival,other"
 ]
 
+# Массив с городами
 var locations = []
 
+# Глобальный флаг,  разрешающий вращать барабан
 var can_spin = true
 
+# Общий сигнал очистки UI
 signal init_ui()
 
+# Общий сигнал начала вращения барабана
 signal spin_started()
 
+# Общий сигнал завершения вращения барабана
 signal spin_finished(sector:int)

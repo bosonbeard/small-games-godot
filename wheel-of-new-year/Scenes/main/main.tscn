@@ -23,10 +23,3 @@ offset_left = 246.0
 offset_top = 77.0
 offset_right = 246.0
 offset_bottom = 77.0
-
-[node name="Label" type="Label" parent="."]
-offset_left = 45.0
-offset_top = 565.0
-offset_right = 188.0
-offset_bottom = 588.0
-text = "v. 0.99 для Натахи"
